@@ -18,4 +18,12 @@ public class Job {
     public String getId() {
         return id;
     }
+
+    public ArrayList<Activity> getActivities() {
+        return activities;
+    }
+
+    public Integer getNbActivities(){
+        return activities.size() ;
+    }
 }
