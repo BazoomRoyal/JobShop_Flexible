@@ -22,4 +22,8 @@ public class Attribution {
     public Integer getCout() {
         return cout;
     }
+
+    public void setMachine(Integer m){
+        this.machine = m ;
+    }
 }

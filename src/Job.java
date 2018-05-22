@@ -11,7 +11,7 @@ public class Job {
         this.activities = new ArrayList<>() ;
     }
 
-    private void addActivity (Activity a){
+    public void addActivity (Activity a){
         this.activities.add(a);
     }
 

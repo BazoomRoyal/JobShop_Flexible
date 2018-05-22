@@ -14,7 +14,7 @@ public class Activity {
         this.nbmach=0;
     }
 
-    private void addMachine(Integer m, Integer c){
+    public void addMachine(Integer m, Integer c){
         machines.add(m);
         costs.add(c);
         nbmach += 1;

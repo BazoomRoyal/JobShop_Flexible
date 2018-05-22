@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -6,81 +8,52 @@ public class Main {
     }
 
     private void go(){
-        /*
-        Sommet sa = new Sommet(1, 0, 1);
-        Sommet sb = new Sommet(2, 0, 1);
-        Sommet sc = new Sommet(3, 0, 1);
-        Sommet sd = new Sommet(4, 0, 1);
-        Sommet se = new Sommet(5, 0, 1);
-        Sommet sf = new Sommet(6, 0, 1);
-        Sommet sg = new Sommet(7, 0, 1);
-        Sommet sh = new Sommet(8, 0, 1);
-        Sommet si = new Sommet(9, 0, 1);
-        Sommet sj = new Sommet(10, 0, 1);
-        Sommet s0 = new Sommet(0, 0, 1);
-        Sommet s46 = new Sommet(11, 0, 1);
 
-        Graphe gr_test = new Graphe() ;
+        Job j1 = new Job("job1") ;
+        Activity A11 = new Activity(11) ;
+        A11.addMachine(0, 3);
+        Activity A12 = new Activity(12) ;
+        A12.addMachine(1,2);
+        A12.addMachine(2,4);
+        Activity A13 = new Activity(13) ;
+        A13.addMachine(1,5);
+        A13.addMachine(2,5);
+        j1.addActivity(A11);
+        j1.addActivity(A12);
+        j1.addActivity(A13);
 
-        gr_test.addSommet(s0);
-        gr_test.addSommet(sa);
-        gr_test.addSommet(sb);
-        gr_test.addSommet(sc);
-        gr_test.addSommet(sd);
-        gr_test.addSommet(se);
-        gr_test.addSommet(sf);
-        gr_test.addSommet(sg);
-        gr_test.addSommet(sh);
-        gr_test.addSommet(si);
-        gr_test.addSommet(sj);
-        gr_test.addSommet(s46);
+        Job j2 = new Job("job2") ;
+        Activity A21 = new Activity(21) ;
+        A21.addMachine(1, 4);
+        Activity A22 = new Activity(22) ;
+        A22.addMachine(0,2);
+        Activity A23 = new Activity(23) ;
+        A23.addMachine(0,2);
+        A23.addMachine(1,4);
+        A23.addMachine(2,2);
+        j2.addActivity(A21);
+        j2.addActivity(A22);
+        j2.addActivity(A23);
 
-        Arc a0 = new Arc(0, s0 , sj ,false) ;
-        Arc a1 = new Arc(16, sj , sc ,false) ;
-        Arc a2 = new Arc(6, sj , sg ,false) ;
-        Arc a3 = new Arc(10, sj , sb ,false) ;
-        Arc a4 = new Arc(6, sj , si ,false) ;
-        Arc a5 = new Arc(2, sc , se ,false) ;
-        Arc a6 = new Arc(4, sc , sf ,false) ;
-        Arc a7 = new Arc(4, se , sh ,false) ;
-        Arc a8 = new Arc(10, sf , sh ,false) ;
-        Arc a9 = new Arc(4, sg , sf ,false) ;
-        Arc a10 = new Arc(8, sg , sd ,false) ;
-        Arc a11 = new Arc(2, sf , sd ,false) ;
-        Arc a12 = new Arc(16, sb , si ,false) ;
-        Arc a13 = new Arc(20, sh , si ,false) ;
-        Arc a14 = new Arc(20, sh , sa ,false) ;
-        Arc a15 = new Arc(12, sd , sa ,false) ;
-        Arc a16 = new Arc(4, sa , s46 ,false) ;
-        Arc a17 = new Arc(10, si , s46 ,false) ;
+        Job j3 = new Job("job3") ;
+        Activity A31 = new Activity(31) ;
+        A31.addMachine(1, 2);
+        A31.addMachine(3, 2);
+        Activity A32 = new Activity(32) ;
+        A32.addMachine(2,3);
+        A32.addMachine(3,5);
+        j3.addActivity(A31);
+        j3.addActivity(A32);
 
-        gr_test.addArc(a0);
-        gr_test.addArc(a1);
-        gr_test.addArc(a2);
-        gr_test.addArc(a3);
-        gr_test.addArc(a4);
-        gr_test.addArc(a5);
-        gr_test.addArc(a6);
-        gr_test.addArc(a7);
-        gr_test.addArc(a8);
-        gr_test.addArc(a9);
-        gr_test.addArc(a10);
-        gr_test.addArc(a11);
-        gr_test.addArc(a12);
-        gr_test.addArc(a13);
-        gr_test.addArc(a14);
-        gr_test.addArc(a15);
-        gr_test.addArc(a16);
-        gr_test.addArc(a17);
+        Jobs jobs = new Jobs(3) ;
+        jobs.addJob(j1);
+        jobs.addJob(j2);
+        jobs.addJob(j3);
 
-        gr_test.Cmax(s46) ;
-        gr_test.printf_tabCouts();*/
-        Integer i ;
-        for(Integer j=0 ; j<10 ; j++) {
-            i = 1 + (int) (Math.random() * (10));
-            System.out.println(i);
-        }
-
+        Algo monJoliAlgo = new Algo() ;
+        Integer premierRes =(-1) ;
+        premierRes = monJoliAlgo.testFonctionnement(jobs);
+        System.out.println(premierRes);
 
     }
 }

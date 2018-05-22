@@ -5,11 +5,12 @@ public class Jobs {
     private ArrayList<Job> jobs ;
     private Integer nbTotMach ;
 
-    public Jobs (){
+    public Jobs (Integer nbMach){
         this.jobs = new ArrayList<>() ;
+        this.nbTotMach = nbMach ;
     }
 
-    private void addJob(Job j){
+    public void addJob(Job j){
         this.jobs.add(j) ;
 
     }

@@ -48,19 +48,19 @@ public class Graphe {
     public Arc findArcWithSource(Sommet source){
         Arc retour = null;
         for(Arc a : arcs){
-            if(a.getSource()==source){
+            if(a.getSource().getIdActivity()==source.getIdActivity()){
                 retour = a ;
             }
         }
         if(retour==null){
-            System.out.println("Problème dans le recherche d'un arc lors de la mise a jour dans les choix");
+            System.out.println("Problème dans le recherche d'un arc lors de la mise a jour dans les choix avec le sommet" + source.getId());
         }
         return retour ;
     }
 
     /*Renvoie -2 si on détecte une boucle dans le graphe)*/
     public Integer Cmax (Sommet fin){
-
+        //System.out.println("index " + fin.getId() + " Date " + tabCouts.get(fin.getId()));
         if(fin.getId()==0){
             return 0;
         }
@@ -98,5 +98,29 @@ public class Graphe {
 
     public ArrayList<Arc> getArcs() {
         return arcs;
+    }
+
+    public Sommet getSommetWithId(Integer id){
+        Sommet retour ;
+        for(Sommet s : this.sommets){
+            if(s.getId()==id){
+                return s ;
+            }
+        }
+        return null ;
+    }
+
+    public void afficherSommets(){
+        for(Sommet s : sommets){
+            System.out.println("ID Sommet : " + s.getId() + "ID activité : " + s.getIdActivity());
+        }
+    }
+
+    public void afficherSommets2(){
+        Integer i ;
+        for(i=0; i<sommets.size() ; i++){
+            Sommet s = getSommetWithId(i) ;
+            System.out.println("ID Sommet : " + s.getId() + "ID activité : " + s.getIdActivity());
+        }
     }
 }

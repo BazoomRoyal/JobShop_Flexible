@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Algo {
 
@@ -27,23 +28,34 @@ public class Algo {
                 compteur++;
             }
         }
-        Sommet sommetFin = new Sommet(46, 0, 0, 99);
+        Sommet sommetFin = new Sommet(compteur, 0, 0, 99);
+        graphe.addSommet(sommetFin);
+        graphe.afficherSommets() ;
+        graphe.afficherSommets2() ;
     }
 
     private void creationArcs(Jobs jobs) {
         Integer nb;
-        Integer cpt = 1;
+        Integer cptj = 1;
+        Integer cpts = 1;
         for (Job j : jobs.getJobs()) {
             nb = j.getNbActivities();
-            Arc arcDebut = new Arc(graphe.getSommets().get(0).getDate(), graphe.getSommets().get(0), graphe.getSommets().get(cpt), false);
+            Arc arcDebut = new Arc(graphe.getSommets().get(0).getDate(), graphe.getSommets().get(0), graphe.getSommets().get(cptj), false);
             graphe.addArc(arcDebut);
+            System.out.println("Création de l'arc avec comme source" + arcDebut.getSource().getIdActivity() + " et comme dest" + arcDebut.getDest().getIdActivity());
+
             for (Integer i = 1; i < nb; i++) {
-                Arc a = new Arc(graphe.getSommets().get(cpt).getDate(), graphe.getSommets().get(cpt), graphe.getSommets().get(cpt + 1), false);
+                Arc a = new Arc(graphe.getSommets().get(cpts).getDate(), graphe.getSommets().get(cpts), graphe.getSommets().get(cpts + 1), false);
                 graphe.addArc(a);
-                cpt++;
+                System.out.println("Création de l'arc avec comme source" + a.getSource().getIdActivity() + " et comme dest" + a.getDest().getIdActivity());
+
+                cpts++;
             }
-            Arc arcFin = new Arc(graphe.getSommets().get(cpt).getDate(), graphe.getSommets().get(cpt), graphe.getSommets().get(46), false);
+            Arc arcFin = new Arc(graphe.getSommets().get(cpts).getDate(), graphe.getSommets().get(cpts), graphe.getSommetWithId(graphe.getSommets().size()-1), false);
             graphe.addArc(arcFin);
+            System.out.println("Création de l'arc avec comme source" + arcFin.getSource().getId() + " et comme dest" + arcFin.getDest().getId());
+            cpts++ ;
+            cptj=cpts ;
         }
     }
 
@@ -70,11 +82,13 @@ public class Algo {
             graphe.getSommets().get(findSommet(attr.getActivite().getId())).setMachine(attr.getMachine());
             /*Mise à jour Arc*/
             graphe.findArcWithSource(graphe.getSommets().get(findSommet(attr.getActivite().getId()))).setCost(attr.getCout());
+            System.out.println("J'ai fait une modif");
         }
 
     }
 
     private void modifArcWithOrdre(ArrayList<Ordre> ordres){
+
         for(Ordre o : ordres){
             Integer classSize = o.getClassement().size() ;
             Integer i;
@@ -95,12 +109,15 @@ public class Algo {
         /* Partie A des choix, attribution activité/machine    */
         /* Modification des valeurs des sommets */
 
-        Integer i ;
+
         Integer compteur = 1;
         for(Job j : jobs.getJobs()){
             for(Activity a : j.getActivities()){
                 /*Générer un nb random avec une seed pour toujours avoir les meme nb random*/
-                i = 1 + (int)(Math.random() * (a.getNbmach()));
+                Random rnd = new Random();
+                rnd.setSeed(1);
+                Integer i = 0 ;
+                i = rnd.nextInt(a.getNbmach()) ;
                 /*On retrouve le coût*/
                 Integer cost = a.getCosts().get(i) ;
                 Attribution attribution = new Attribution(a, a.getMachines().get(i), cost) ;
@@ -126,5 +143,78 @@ public class Algo {
         }
         modifArcWithOrdre(choix.getM());
 
+    }
+
+    private void modifChoix(Jobs jobs){
+        Random rnd = new Random();
+        rnd.setSeed(1);
+        Integer i = 0 ;
+        i = rnd.nextInt(2) ;
+        //SI le random est à 0 on fait une modif de M
+        if(i==0){
+            //Premier random
+            Random rnd2 = new Random();
+            rnd2.setSeed(jobs.getNbTotMach());
+            Integer j = 0 ;
+            j = rnd.nextInt(jobs.getNbTotMach() +1) ;
+
+            //Deuxieme random
+            Random rnd3 = new Random();
+            rnd3.setSeed(choix.getM().get(j).getClassement().size());
+            Integer k = 0 ;
+            k = rnd.nextInt(choix.getM().get(j).getClassement().size() +1) ;
+
+            //Troisième random
+            Random rnd4 = new Random();
+            rnd4.setSeed(choix.getM().get(j).getClassement().size());
+            Integer r = 0 ;
+            r = rnd.nextInt(choix.getM().get(j).getClassement().size() +1) ;
+
+            Integer activity = choix.getM().get(j).getClassement().get(k) ;
+            Integer activity2 = choix.getM().get(j).getClassement().get(r) ;
+            choix.getM().get(j).getClassement().set( k, activity2) ;
+            choix.getM().get(j).getClassement().set( r, activity) ;
+        }
+        //sinon on fait une modif de A
+        else{
+            //Premier random
+            Random r = new Random();
+            r.setSeed(choix.getA().size());
+            Integer rand = 0 ;
+            rand = rnd.nextInt(choix.getA().size() +1) ;
+            Activity activity = choix.getA().get(rand).getActivite() ;
+            Integer oldMachine = choix.getA().get(rand).getMachine() ;
+
+            //deuxieme random
+            Random r2 = new Random();
+            r2.setSeed(activity.getNbmach());
+            Integer rand2 = 0 ;
+            rand2 = rnd.nextInt(activity.getNbmach() +1) ;
+            Integer newMachine = choix.getA().get(rand2).getMachine();
+
+            choix.getA().get(rand).setMachine(newMachine);
+
+            Integer index = choix.getM().get(oldMachine).getIndexWithActivity(activity.getId()) ;
+            choix.getM().get(oldMachine).delClassement(index);
+
+            choix.getM().get(newMachine).addClassement(activity.getId());
+        }
+        this.graphe.delArcMobile();
+        modifArcWithOrdre(choix.getM());
+        modifSommetArcWithAttribution(choix.getA());
+    }
+
+    public Integer testFonctionnement(Jobs jobs){
+        creationGraphe(jobs);
+        creationArcs(jobs);
+        initChoix(jobs);
+        Integer i = 0 ;
+        Integer res = (-1);
+        for(i=0 ; i<graphe.getSommets().size(); i++) {
+            Sommet sommetStart = this.graphe.getSommetWithId(i);
+            res = this.graphe.Cmax(sommetStart);
+            System.out.println("Cout du Sommet " + i + " : "+ res);
+        }
+        return res ;
     }
 }

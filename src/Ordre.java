@@ -14,7 +14,20 @@ public class Ordre {
         this.classement.add(a) ;
     }
 
+    public void delClassement(Integer index){
+        this.classement.remove(index) ;
+    }
+
     public ArrayList<Integer> getClassement() {
         return classement;
+    }
+
+    public void setClassement(Integer index, Integer value){
+        this.classement.set(index, value) ;
+    }
+
+    public Integer getIndexWithActivity(Integer act){
+
+        return classement.indexOf(act) ;
     }
 }
