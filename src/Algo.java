@@ -1,10 +1,12 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Collections ;
 
 public class Algo {
 
     private Graphe graphe;
     private Choix choix;
+    private Integer randInit ;
     private Integer randType_Choix ;
     private Integer randM_Machine ;
     private Integer randM_Activity ;
@@ -16,6 +18,7 @@ public class Algo {
     public Algo(){
         this.graphe = new Graphe() ;
         this.choix = new Choix() ;
+        this.randInit = 0 ;
         this.randType_Choix = 0 ;
         this.randM_Machine = 0 ;
         this.randM_Activity = 0 ;
@@ -32,7 +35,7 @@ public class Algo {
     }
 
     private void creationGraphe(Jobs jobs){
-        Sommet sommetDebut = new Sommet(0 , 0, (-1),00) ;
+        Sommet sommetDebut = new Sommet(0 , 0, (-1),0) ;
         graphe.addSommet(sommetDebut);
         Integer compteur = 1;
         for(Job j: jobs.getJobs()){
@@ -42,10 +45,9 @@ public class Algo {
                 compteur++;
             }
         }
-        Sommet sommetFin = new Sommet(compteur, 0, 0, 99);
+        Sommet sommetFin = new Sommet(compteur, 0, (-1), 10000);
         graphe.addSommet(sommetFin);
         graphe.afficherSommets() ;
-        graphe.afficherSommets2() ;
     }
 
     private void creationArcs(Jobs jobs) {
@@ -152,13 +154,14 @@ public class Algo {
         for(Job j : jobs.getJobs()){
             for(Activity a : j.getActivities()){
                 /*Générer un nb random avec une seed pour toujours avoir les meme nb random*/
-                Random rnd = new Random();
+                /*Random rnd = new Random();
                 rnd.setSeed(1);
                 Integer i = 0 ;
-                i = rnd.nextInt(a.getNbmach()) ;
+                i = rnd.nextInt(a.getNbmach()) ;*/
+                randInit = randInt(0, a.getNbmach()-1);
                 /*On retrouve le coût*/
-                Integer cost = a.getCosts().get(i) ;
-                Attribution attribution = new Attribution(a, a.getMachines().get(i), cost) ;
+                Integer cost = a.getCosts().get(randInit) ;
+                Attribution attribution = new Attribution(a, a.getMachines().get(randInit), cost) ;
                 choix.addAttribution(attribution);
             }
         }
@@ -178,6 +181,7 @@ public class Algo {
             for(Integer s : ordre.getClassement()){
 
             }
+            //Collections.shuffle(ordre.getClassement());
         }
         modifArcWithOrdre(choix.getM());
 
@@ -191,35 +195,50 @@ public class Algo {
         Integer i = 0 ;
         i = rnd.nextInt(2) ;*/
         randType_Choix = randInt(0, 1) ;
-        System.out.println("On modifie : "+ randType_Choix);
         //SI le random est à 0 on fait une modif de M
         if(randType_Choix==0){
 
-            //Premier random
-           /* Random rnd2 = new Random();
-            rnd2.setSeed(jobs.getNbTotMach());
-            Integer j = 0 ;
-            j = rnd.nextInt(jobs.getNbTotMach() +1) ;*/
+
             randM_Machine = randInt(0, (jobs.getNbTotMach())-1) ;
 
-            //Deuxieme random
-            /*Random rnd3 = new Random();
-            rnd3.setSeed(newChoix.getM().get(j).getClassement().size());
-            Integer k = 0 ;
-            k = rnd.nextInt(newChoix.getM().get(j).getClassement().size() +1) ;*/
-            System.out.println("taille du classement qu'on modifie : "+ newChoix.getM().get(randM_Machine).getClassement().size());
+            //System.out.println("taille du classement qu'on modifie : "+ newChoix.getM().get(randM_Machine).getClassement().size());
             if(newChoix.getM().get(randM_Machine).getClassement().size() > 1) {
-                randM_Activity = randInt(0, newChoix.getM().get(randM_Machine).getClassement().size() - 1);
-
-                //Troisième random
-                /*Random rnd4 = new Random();
-                rnd4.setSeed(newChoix.getM().get(j).getClassement().size());
-                Integer r = 0 ;
-                r = rnd.nextInt(newChoix.getM().get(j).getClassement().size() +1) ;*/
+                //A decommenter en cas de probleme
+               /* randM_Activity = randInt(0, newChoix.getM().get(randM_Machine).getClassement().size() - 1);
                 randM_Activity2 = randInt(0, newChoix.getM().get(randM_Machine).getClassement().size() - 1);
+                //randM_Activity2 = randInt(0, 1);
+
 
                 Integer activity = newChoix.getM().get(randM_Machine).getClassement().get(randM_Activity);
                 Integer activity2 = newChoix.getM().get(randM_Machine).getClassement().get(randM_Activity2);
+
+
+                //System.out.println("ON SWAP L'ACTIVITE : " + activity + " ET L'ACTIVITE : " + activity2 + "DE LA MACHINE : " + randM_Machine);
+                newChoix.getM().get(randM_Machine).getClassement().set(randM_Activity, activity2);
+                newChoix.getM().get(randM_Machine).getClassement().set(randM_Activity2, activity);*/
+                randM_Activity = randInt(0, newChoix.getM().get(randM_Machine).getClassement().size() - 1);
+                Integer activity = newChoix.getM().get(randM_Machine).getClassement().get(randM_Activity) ;
+                Integer activity2 = 0 ;
+
+                if(randM_Activity==0){
+                    randM_Activity2 = randM_Activity+1 ;
+                    activity2 = newChoix.getM().get(randM_Machine).getClassement().get(randM_Activity2) ;
+                }
+                else if(randM_Activity==(newChoix.getM().get(randM_Machine).getClassement().size() - 1) ){
+                    randM_Activity2 = randM_Activity -1 ;
+                    activity2 = newChoix.getM().get(randM_Machine).getClassement().get(randM_Activity2) ;
+                }
+                else{
+                    randM_Activity2 = randInt(0, 1);
+                    if(randM_Activity2==1){
+                        randM_Activity2 = randM_Activity+1 ;
+                        activity2 = newChoix.getM().get(randM_Machine).getClassement().get(randM_Activity2) ;
+                    }
+                    else{
+                        randM_Activity2 = randM_Activity -1 ;
+                        activity2 = newChoix.getM().get(randM_Machine).getClassement().get(randM_Activity2) ;
+                    }
+                }
                 System.out.println("ON SWAP L'ACTIVITE : " + activity + " ET L'ACTIVITE : " + activity2 + "DE LA MACHINE : " + randM_Machine);
                 newChoix.getM().get(randM_Machine).getClassement().set(randM_Activity, activity2);
                 newChoix.getM().get(randM_Machine).getClassement().set(randM_Activity2, activity);
@@ -246,23 +265,21 @@ public class Algo {
             Integer rand2 = 0 ;
             rand2 = rnd.nextInt(activity.getNbmach() +1) ;*/
             this.randA_Machine = randInt(0, activity.getNbmach()-1);
-            System.out.println("RANDOOOOM " + randA_Machine);
+            //System.out.println("RANDOOOOM " + randA_Machine);
             Integer newMachine = activity.getMachines().get(randA_Machine) ;
                     //newChoix.getA().get(rand2).getMachine();
-            System.out.println("modif act " + activity.getId() + "de la mach " + oldMachine + "vers la " + newMachine);
+            //System.out.println("modif act " + activity.getId() + "de la mach " + oldMachine + "vers la " + newMachine);
             if(oldMachine != newMachine){
                 newChoix.getA().get(randA_Activity).setMachine(newMachine);
                 newChoix.getA().get(randA_Activity).setCout(activity.getCosts().get(randA_Machine));
 
                 Integer index = newChoix.getM().get(oldMachine).getIndexWithActivity(graphe.getSommetWithIdActivity(activity.getId()).getId()) ;
-                System.out.println("INDEEEEEEEEEEX " + index);
+                //System.out.println("INDEEEEEEEEEEX " + index);
+                //System.out.println("New Machine : " + newMachine + " autre : " + graphe.getSommetWithIdActivity(activity.getId()).getId());
 
                 newChoix.getM().get(oldMachine).delClassement(graphe.getSommetWithIdActivity(activity.getId()).getId());
-
                 newChoix.getM().get(newMachine).addClassement(graphe.getSommetWithIdActivity(activity.getId()).getId());
-                System.out.println("Nb arcs avant suppr: "+ this.graphe.getArcs().size());
                 this.graphe.delArcMobile();
-                System.out.println("Nb arcs après supr: "+ this.graphe.getArcs().size());
 
                 modifSommetArcWithAttribution(newChoix.getA());
                 modifArcWithOrdre(newChoix.getM());
@@ -299,8 +316,8 @@ public class Algo {
         Integer newRes = (-1) ;
         Sommet sommetStart = this.graphe.getSommetWithId(graphe.getSommets().size()-1) ;
         Choix memChoix = this.choix ;
-        System.out.println("Premier Choix :");
-        memChoix.printChoix();
+        //System.out.println("Premier Choix :");
+        //memChoix.printChoix();
         //System.out.println("Premier Graphe :");
         //this.graphe.printGraphe();
 
@@ -310,13 +327,13 @@ public class Algo {
         System.out.println("PREMIER RESULTAT"+ res);
         Integer i = 0 ;
         while(true){
-            if(plateau ==10000){
+            if(plateau ==100){
                 System.out.println("Il aura fallu "+ i + " itérations pour obtenir un résultat !");
                 return res ;
             }
             else {
                 Choix newChoix = modifChoix(memChoix, jobs);
-                System.out.println("Nouveau choix :");
+                //System.out.println("Nouveau choix :");
                 newChoix.printChoix();
                 //System.out.println("Nouveau choix :");
                 //this.graphe.printGraphe();
@@ -325,14 +342,16 @@ public class Algo {
                 this.graphe.resetCouts();
                 System.out.println("Itération n° " + i);
                 System.out.println("Res = " + res + " newRes = " + newRes);
-                System.out.println("############################################################");
+               // System.out.println("############################################################");
                 if ((newRes < res) && (newRes != (-2))) {
                     memChoix = newChoix;
                     res = newRes;
                     plateau = 0;
-                } else {
-                    plateau++;
                 }
+                else if(newRes != (-2)){
+                    plateau++ ;
+                }
+
             }
             i++ ;
         }

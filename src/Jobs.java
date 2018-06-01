@@ -22,4 +22,18 @@ public class Jobs {
     public ArrayList<Job> getJobs() {
         return jobs;
     }
+
+    public void printJobs(){
+        System.out.println("############################");
+        for(Job j : this.jobs){
+            System.out.println("Job : " +j.getId());
+            for(Activity a : j.getActivities()){
+                System.out.println("ID Activity : "+ a.getId() + "  Nb machines : "+ a.getNbmach()+ "  ");
+                Integer i = 0 ;
+                for(i=0 ; i< a.getMachines().size() ; i++){
+                    System.out.println("Machine "+ a.getMachines().get(i)+ " cout " + a.getCosts().get(i));
+                }
+            }
+        }
+    }
 }
