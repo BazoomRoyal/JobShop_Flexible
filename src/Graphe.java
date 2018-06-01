@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+
 public class Graphe {
 
     private ArrayList<Sommet> sommets ;
@@ -17,22 +18,29 @@ public class Graphe {
         this.tabCouts.add((-1)) ;
     }
 
+
     public void addArc(Arc a){
         this.arcs.add(a);
     }
 
     /*Supprime tous les arcs mobiles du graphe*/
     public void delArcMobile(){
+        ArrayList<Arc> newArcs = new ArrayList<>() ;
         for (Arc a : this.arcs){
-            if (a.getMobile()==true) {
-                this.arcs.remove(a) ;
+            if (a.getMobile()==false) {
+                newArcs.add(a) ;
             }
+
         }
+        this.arcs = newArcs ;
+
     }
 
     public void resetCouts(){
-        for(Integer i : tabCouts){
-            i=(-1) ;
+        Integer i = 0 ;
+
+        for(i=0 ; i<tabCouts.size() ; i++){
+            this.tabCouts.set(i, (-1)) ;
         }
     }
 
@@ -44,11 +52,11 @@ public class Graphe {
 
     }
 
-    /*Trouve en arc en lui donnant en argument un sommet source*/
-    public Arc findArcWithSource(Sommet source){
+    /*Trouve en arc fixe en lui donnant en argument un sommet source*/
+    public Arc findArcFixeWithSource(Sommet source){
         Arc retour = null;
         for(Arc a : arcs){
-            if(a.getSource().getIdActivity()==source.getIdActivity()){
+            if((a.getSource().getIdActivity()==source.getIdActivity()) && (a.getMobile()==false)){
                 retour = a ;
             }
         }
@@ -58,9 +66,20 @@ public class Graphe {
         return retour ;
     }
 
+    public void printGraphe(){
+        for(Sommet s : sommets){
+            System.out.println("Sommet : " + s.getId() + " Activité : " + s.getIdActivity()+ " Cout : "+ s.getDate()+ " Machine : "+ s.getMachine());
+        }
+        for(Arc a : arcs){
+            System.out.println("Arc = > Source : " + a.getSource().getId() + " Dest : " + a.getDest().getId() + " Cout : " + a.getCost() + " Mobile : " + a.getMobile());
+        }
+
+    }
+
+
     /*Renvoie -2 si on détecte une boucle dans le graphe)*/
     public Integer Cmax (Sommet fin){
-        //System.out.println("index " + fin.getId() + " Date " + tabCouts.get(fin.getId()));
+
         if(fin.getId()==0){
             return 0;
         }
@@ -104,6 +123,16 @@ public class Graphe {
         Sommet retour ;
         for(Sommet s : this.sommets){
             if(s.getId()==id){
+                return s ;
+            }
+        }
+        return null ;
+    }
+
+    public Sommet getSommetWithIdActivity(Integer id){
+        Sommet retour ;
+        for(Sommet s : this.sommets){
+            if(s.getIdActivity()==id){
                 return s ;
             }
         }

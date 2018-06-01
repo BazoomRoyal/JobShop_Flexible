@@ -14,8 +14,15 @@ public class Ordre {
         this.classement.add(a) ;
     }
 
-    public void delClassement(Integer index){
-        this.classement.remove(index) ;
+    public void delClassement(Integer sommet){
+        ArrayList<Integer> newClassement = new ArrayList<>() ;
+        for(Integer i : this.classement){
+            if(i != sommet){
+                newClassement.add(i) ;
+            }
+        }
+        this.classement = newClassement ;
+
     }
 
     public ArrayList<Integer> getClassement() {
@@ -29,5 +36,9 @@ public class Ordre {
     public Integer getIndexWithActivity(Integer act){
 
         return classement.indexOf(act) ;
+    }
+
+    public Integer getMachine() {
+        return machine;
     }
 }

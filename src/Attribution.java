@@ -26,4 +26,6 @@ public class Attribution {
     public void setMachine(Integer m){
         this.machine = m ;
     }
+
+    public void setCout(Integer c){this.cout = c;}
 }

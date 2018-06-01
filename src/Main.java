@@ -7,6 +7,8 @@ public class Main {
         launch.go();
     }
 
+
+
     private void go(){
 
         Job j1 = new Job("job1") ;
@@ -37,11 +39,11 @@ public class Main {
 
         Job j3 = new Job("job3") ;
         Activity A31 = new Activity(31) ;
-        A31.addMachine(1, 2);
-        A31.addMachine(3, 2);
+        A31.addMachine(0, 2);
+        A31.addMachine(2, 2);
         Activity A32 = new Activity(32) ;
-        A32.addMachine(2,3);
-        A32.addMachine(3,5);
+        A32.addMachine(1,3);
+        A32.addMachine(2,5);
         j3.addActivity(A31);
         j3.addActivity(A32);
 
@@ -52,8 +54,8 @@ public class Main {
 
         Algo monJoliAlgo = new Algo() ;
         Integer premierRes =(-1) ;
-        premierRes = monJoliAlgo.testFonctionnement(jobs);
-        System.out.println(premierRes);
+        premierRes = monJoliAlgo.testBoucle(jobs);
+        System.out.println("Résultat final et incroyable : " + premierRes);
 
     }
 }
